@@ -1,0 +1,14 @@
+{{- $root := . -}}
+{{- range $roleName, $role := .Values.vmRoles }}
+{{- range $index := until ($role.count | int) }}
+---
+apiVersion: kubevirt.io/v1alpha3
+kind: VirtualMachine
+metadata:
+  name: {{ $roleName }}-{{ $index }}
+spec:
+  vasya: {{ $role.vasya }}
+  end: "the end"
+
+{{ end }}
+{{ end }}

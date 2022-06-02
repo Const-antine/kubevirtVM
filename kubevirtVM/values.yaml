@@ -1,0 +1,7 @@
+vmRoles:
+  master:
+    count: 1
+    vasya: "pupkin"
+  worker:
+    count: 2
+    vasya: "fuck"
