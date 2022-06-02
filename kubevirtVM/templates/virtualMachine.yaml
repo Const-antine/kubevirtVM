@@ -1,14 +1,62 @@
 {{- $root := . -}}
 {{- range $roleName, $role := .Values.vmRoles }}
 {{- range $index := until ($role.count | int) }}
+
+{{- $disk_boot_image := index (default (dict) $role.storage) "boot_image_url" | default $.Values.storage.golden_boot_image.url -}}
+
+{{- $cloudInitUserData := index (default (dict) $role.cloudInit) "userData" | default (index (default (dict) $.Values.cloudInit) "userData") -}}
+{{- $cloudInitNetworkData := index (default (dict) $role.cloudInit) "networkData" | default (index (default (dict) $.Values.cloudInit) "networkData") -}}
 ---
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
   name: {{ $roleName }}-{{ $index }}
 spec:
-  vasya: {{ $role.vasya }}
-  end: "the end"
-
+  running: true
+  template:
+    metadata:
+      labels:
+        label: "TODO"
+    spec:
+      hostname: {{ $roleName }}-{{ $index }}
+      domain:
+        devices:
+          disks:
+            - name: rootdisk
+              disk:
+                bus: virtio
+            {{- if or $cloudInitUserData $cloudInitNetworkData }}
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
+            {{- end }}
+          interfaces:
+            - bridge: {}
+              name: bar
+          networkInterfaceMultiqueue: true
+{{- with $role.resources }}
+        resources:
+{{ toYaml . | indent 10 }}
+{{- end }}
+      networks:
+        - name: bar
+          multus:
+            networkName: bar
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: {{ $disk_boot_image | quote }}
+        {{- if or $cloudInitUserData $cloudInitNetworkData }}
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            {{- if $cloudInitUserData }}
+            userData: |
+              {{- $cloudInitUserData | trim | nindent 17 -}}
+            {{- end }}
+            {{ if $cloudInitNetworkData -}}
+            networkData: |
+              {{- $cloudInitNetworkData | nindent 17 }}
+            {{ end -}}
+        {{- end }}
 {{ end }}
 {{ end }}
