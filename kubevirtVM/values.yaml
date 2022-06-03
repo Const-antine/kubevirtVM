@@ -1,14 +1,14 @@
 vmRoles:
-  master:
-    count: 1
-#    boot_image_url: "custom_specific_image"
-    resources:
-      requests:
-        memory: 1G
-        cpu: "1"
+#  master:
+#    count: 1
+##    boot_image_url: "custom_specific_image"
+#    resources:
+#      requests:
+#        memory: 1G
+#        cpu: "1"
 
   worker:
-    count: 2
+    count: 1
     resources:
       requests:
         memory: 1G
