@@ -19,6 +19,9 @@ vmRoles:
 
   database:
     count: 1
+    resources:
+      requests:
+        memory: 1G
     hostDisk:
       capacity: 1Gi
 

@@ -46,7 +46,7 @@ spec:
       networks:
         - name: bar
           multus:
-            networkName: bar
+            networkName: br-network
       volumes:
         - name: rootdisk
           containerDisk:
