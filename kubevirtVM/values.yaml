@@ -24,7 +24,17 @@ vmRoles:
         memory: 1G
     hostDisk:
       capacity: 1Gi
-
+    cloudInit:
+      networkData: |
+        version: 2
+        ethernets:
+          # opaque ID for physical interfaces, only referred to by other stanzas
+          enp1s0:
+            addresses:
+              - 192.168.50.2/24
+            gateway4: 192.168.50.1
+            nameservers:
+              addresses: [8.8.8.8]
 
 cloudInit:
   userData: |
