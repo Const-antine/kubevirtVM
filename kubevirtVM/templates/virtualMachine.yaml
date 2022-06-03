@@ -1,4 +1,4 @@
-{{- $root := . -}}
+
 {{- range $roleName, $role := .Values.vmRoles }}
 {{- range $index := until ($role.count | int) }}
 
@@ -25,6 +25,11 @@ spec:
             - name: rootdisk
               disk:
                 bus: virtio
+            {{- if $role.hostDisk }}
+            - name: workdir
+              disk:
+                bus: virtio
+            {{- end }}
             {{- if or $cloudInitUserData $cloudInitNetworkData }}
             - name: cloudinitdisk
               disk:
@@ -46,6 +51,13 @@ spec:
         - name: rootdisk
           containerDisk:
             image: {{ $disk_boot_image | quote }}
+        {{- if $role.hostDisk }}
+        - name: workdir
+          hostDisk:
+            capacity: {{ $role.hostDisk.capacity }}
+            path: /var/hostdisk/{{ $roleName }}-{{ $index }}.img
+            type: DiskOrCreate
+        {{- end }}
         {{- if or $cloudInitUserData $cloudInitNetworkData }}
         - name: cloudinitdisk
           cloudInitNoCloud:

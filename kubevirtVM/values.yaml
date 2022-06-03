@@ -13,9 +13,20 @@ vmRoles:
       requests:
         memory: 1G
         cpu: "1"
+    cloudInit:
+      userData: |
+        name: vasya
+
+  database:
+    count: 1
+    hostDisk:
+      capacity: 1Gi
 
 
-
+cloudInit:
+  userData: |
+    ssh_authorized_keys:
+      - TBD
 
 storage:
   golden_boot_image:
