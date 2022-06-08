@@ -14,8 +14,21 @@ vmRoles:
         memory: 1G
         cpu: "1"
     cloudInit:
-      userData: |
-        name: vasya
+      userData: |-
+        #cloud-config
+        user: fedora
+        password: ssh-demo
+        chpasswd:
+        expire: false
+      networkData: | 
+        version: 2
+        ethernets:
+          enp1s0:
+            addresses:
+              - 192.168.1.4/24
+            gateway4: 192.168.1.1
+            nameservers:
+              addresses: [8.8.8.8]
 
   database:
     count: 1
@@ -31,16 +44,17 @@ vmRoles:
           # opaque ID for physical interfaces, only referred to by other stanzas
           enp1s0:
             addresses:
-              - 192.168.50.2/24
-            gateway4: 192.168.50.1
+              - 192.168.1.5/24
+            gateway4: 192.168.1.1
             nameservers:
               addresses: [8.8.8.8]
 
 cloudInit:
   userData: |
     ssh_authorized_keys:
-      - TBD
+      - ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOlmHbmAZvLMOTbBX4JIu+L1yqXeV5S9jQiJ61nC/s4o5ab6JJKEoigP7bpCwvddjF4aj1iRZR/y1T7dJQXxkBZqTFRe7d3MwN3QfkiQZNRp5pkWf1GXBTtias/sH2fvhg==
 
 storage:
   golden_boot_image:
-    url: "quay.io/kubevirt/virtio-container-disk:v0.36.4"
+    url: "ruslanloman/ubuntu-container-disk:18.04.5"
+
