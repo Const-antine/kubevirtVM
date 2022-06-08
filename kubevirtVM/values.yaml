@@ -15,11 +15,8 @@ vmRoles:
         cpu: "1"
     cloudInit:
       userData: |-
-        #cloud-config
-        user: fedora
-        password: ssh-demo
-        chpasswd:
-        expire: false
+        #!/bin/bash
+        echo "Application setup goes here"
       networkData: | 
         version: 2
         ethernets:
