@@ -14,9 +14,6 @@ vmRoles:
         memory: 1G
         cpu: "1"
     cloudInit:
-      userData: |-
-        #!/bin/bash
-        echo "Application setup goes here"
       networkData: |
         version: 2
         ethernets:
@@ -35,6 +32,22 @@ vmRoles:
     hostDisk:
       capacity: 1Gi
     cloudInit:
+      userData: |
+        #cloud-config
+        ssh_authorized_keys:
+          - ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOlmHbmAZvLMOTbBX4JIu+L1yqXeV5S9jQiJ61nC/s4o5ab6JJKEoigP7bpCwvddjF4aj1iRZR/y1T7dJQXxkBZqTFRe7d3MwN3QfkiQZNRp5pkWf1GXBTtias/sH2fvhg==
+        disk_setup:
+          /dev/vdb:
+            table_type: 'mbr'
+            layout: True
+        fs_setup:
+          - label: hostdisk
+            filesystem: 'ext4'
+            device: /dev/vdb
+            partition: vdb1
+            overwrite: true
+        mounts:
+          - ["/dev/vdb", "/var/lib/mysql"]
       networkData: |
         version: 2
         ethernets:
@@ -52,20 +65,7 @@ cloudInit:
     ssh_authorized_keys:
       - ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOlmHbmAZvLMOTbBX4JIu+L1yqXeV5S9jQiJ61nC/s4o5ab6JJKEoigP7bpCwvddjF4aj1iRZR/y1T7dJQXxkBZqTFRe7d3MwN3QfkiQZNRp5pkWf1GXBTtias/sH2fvhg==
 
-    disk_setup:
-      /dev/vdb:
-        table_type: 'mbr'
-        layout: True
-    fs_setup:
-      - label: hostdisk
-        filesystem: 'ext4'
-        device: /dev/vdb
-        partition: vdb1
-        overwrite: true
 
-
-    mounts:
-      - ["/dev/vdb", "/var/lib/mysql"]
 
 storage:
   golden_boot_image:
