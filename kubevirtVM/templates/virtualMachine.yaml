@@ -18,16 +18,17 @@ spec:
       labels:
         label: "TODO"
     spec:
-      {{- if $role.hostDisk }}
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  {{- include "kubevirtVM.selectorLabels" $ | nindent 18 }}
-      {{- end }}
+      affinity:
+        {{- if $role.hostDisk }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    {{- include "kubevirtVM.selectorLabels" $ | nindent 20 }}
+        {{- end }}
       hostname: {{ $roleName }}-{{ $index }}
       domain:
         devices:
