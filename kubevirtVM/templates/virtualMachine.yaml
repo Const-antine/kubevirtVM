@@ -58,10 +58,6 @@ spec:
             - bridge: {}
               name: bar
           networkInterfaceMultiqueue: true
-{{- with $role.resources }}
-        resources:
-{{ toYaml . | indent 10 }}
-{{- end }}
       networks:
         - name: bar
           multus:

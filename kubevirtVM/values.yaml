@@ -59,13 +59,20 @@ vmRoles:
             nameservers:
               addresses: [8.8.8.8]
 
+flavors:
+  worker:
+    memory: 1G
+    cpu: "1"
+  database:
+    memory: 1G
+
+
+
 cloudInit:
   userData: |
     #cloud-config
     ssh_authorized_keys:
       - ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBOlmHbmAZvLMOTbBX4JIu+L1yqXeV5S9jQiJ61nC/s4o5ab6JJKEoigP7bpCwvddjF4aj1iRZR/y1T7dJQXxkBZqTFRe7d3MwN3QfkiQZNRp5pkWf1GXBTtias/sH2fvhg==
-
-
 
 storage:
   golden_boot_image:
