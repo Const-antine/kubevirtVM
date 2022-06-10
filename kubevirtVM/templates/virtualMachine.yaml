@@ -18,8 +18,8 @@ spec:
       labels:
         label: "TODO"
     spec:
+      {{- if $role.hostDisk }}
       affinity:
-        {{- if $role.hostDisk }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
@@ -28,7 +28,7 @@ spec:
                 labelSelector:
                   matchLabels:
                     {{- include "kubevirtVM.selectorLabels" $ | nindent 20 }}
-        {{- end }}
+      {{- end }}
       hostname: {{ $roleName }}-{{ $index }}
       domain:
         devices:
