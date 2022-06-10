@@ -3,7 +3,6 @@
 {{- range $index := until ($role.count | int) }}
 
 {{- $disk_boot_image := index (default (dict) $role.storage) "boot_image_url" | default $.Values.storage.golden_boot_image.url -}}
-
 {{- $hostName := printf "%s-%d" $roleName  $index -}}
 
 {{- $cloudInitUserData := index (default (dict) $role.cloudInit) "userData" | default (index (default (dict) $.Values.cloudInit) "userData") -}}
