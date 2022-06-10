@@ -4,19 +4,28 @@
 
 {{- $disk_boot_image := index (default (dict) $role.storage) "boot_image_url" | default $.Values.storage.golden_boot_image.url -}}
 
+{{- $hostName := printf "%s-%d" $roleName  $index -}}
+
 {{- $cloudInitUserData := index (default (dict) $role.cloudInit) "userData" | default (index (default (dict) $.Values.cloudInit) "userData") -}}
 {{- $cloudInitNetworkData := index (default (dict) $role.cloudInit) "networkData" | default (index (default (dict) $.Values.cloudInit) "networkData") -}}
 ---
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
-  name: {{ $roleName }}-{{ $index }}
+  name: {{ $hostName }}
 spec:
   running: true
   template:
     metadata:
       labels:
-        label: "TODO"
+        {{- include "kubevirtVM.labels" $ | nindent 8 }}
+        role: {{ $roleName }}
+        hostname: {{ $hostName }}
+        {{- if not $role.hostDisk }}
+        state: "Stateless"
+        {{- else }}
+        state: "Stateful"
+        {{- end }}
     spec:
       {{- if $role.hostDisk }}
       affinity:
@@ -29,7 +38,7 @@ spec:
                   matchLabels:
                     {{- include "kubevirtVM.selectorLabels" $ | nindent 20 }}
       {{- end }}
-      hostname: {{ $roleName }}-{{ $index }}
+      hostname: {{ $hostName }}
       domain:
         devices:
           disks:
@@ -66,7 +75,7 @@ spec:
         - name: workdir
           hostDisk:
             capacity: {{ $role.hostDisk.capacity }}
-            path: /var/hostdisk/{{ $roleName }}-{{ $index }}.img
+            path: /var/hostdisk/{{ $hostName }}.img
             type: DiskOrCreate
         {{- end }}
         {{- if or $cloudInitUserData $cloudInitNetworkData }}
