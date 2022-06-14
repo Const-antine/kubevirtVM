@@ -8,8 +8,8 @@ spec:
   selector:
     matchLabels:
       role: {{ $flavorName }}
-  devices: {}
   domain:
+    devices: {}
     resources:
       requests:
         {{- if $flavor.memory }}
