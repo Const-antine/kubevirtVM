@@ -5,12 +5,8 @@ kind: VirtualMachineFlavor
 metadata:
   name: {{ $flavorName }}-flavor
 spec:
-  resources:
-    requests:
-      {{- if $flavor.memory }}
-      memory: {{ $flavor.memory }}
-      {{- end }}
-      {{- if $flavor.cpu }}
-      cpu: {{ $flavor.cpu }}
-      {{- end }}
+  memory:
+    guest: {{ $flavor.memory }}
+  cpu:
+    guest: {{ $flavor.cpu }}
 {{ end }}
