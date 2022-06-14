@@ -1,0 +1,16 @@
+{{- range $flavorName, $flavor := .Values.flavors }}
+---
+apiVersion: flavor.kubevirt.io/v1alpha1
+kind: VirtualMachineFlavor
+metadata:
+  name: {{ $flavorName }}-flavor
+spec:
+  resources:
+    requests:
+      {{- if $flavor.memory }}
+      memory: {{ $flavor.memory }}
+      {{- end }}
+      {{- if $flavor.cpu }}
+      cpu: {{ $flavor.cpu }}
+      {{- end }}
+{{ end }}

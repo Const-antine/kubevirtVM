@@ -14,6 +14,9 @@ metadata:
   name: {{ $hostName }}
 spec:
   running: true
+  flavor:
+    kind: VirtualMachineFlavor
+    name: {{ $roleName }}-flavor
   template:
     metadata:
       labels:
